@@ -15,7 +15,23 @@ def obj_to_iso_format(obj):
 
 def funcToView(func):
     def view(request):
-        response = HttpResponse(json.dumps(func(), default=obj_to_iso_format), content_type="application/json")
+        try:
+            # u'key': u'value' => 'key': 'value'
+            request_params = {}
+            for key in request.GET:
+                request_params[str(key)] = str(request.GET[key])
+            result = func(request_params)
+            response_obj = {'result': result,
+                            'params': request_params,
+                            'success': True}
+            response_json = json.dumps(response_obj, default=obj_to_iso_format)
+        except Exception as e:
+            response_obj = {'result': [],
+                            'params': str(request.GET),
+                            'success': False,
+                            'error': type(e).__name__ + ': ' + e.message}
+            response_json = json.dumps(response_obj, default=obj_to_iso_format) 
+        response = HttpResponse(response_json, content_type="application/json")
         response["Access-Control-Allow-Origin"] = "*"
         return response
     return view
