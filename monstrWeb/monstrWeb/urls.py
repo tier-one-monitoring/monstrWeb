@@ -21,12 +21,20 @@ def funcToView(func):
             for key in request.GET:
                 request_params[str(key)] = str(request.GET[key])
             result = func(request_params)
-            response_obj = {'result': result,
-                            'params': request_params,
-                            'success': True}
+            if result['success']:
+                response_obj = {'data': result['data'],
+                                'params': request_params,
+                                'applied_params': result['applied_params'],
+                                'success': True}
+            if not result['success']:
+                response_obj = {'data': [],
+                                'params': result['incoming_params'],
+                                'default_params': result['default_params'],
+                                'success': False,
+                                'error': result['error']}
             response_json = json.dumps(response_obj, default=obj_to_iso_format)
         except Exception as e:
-            response_obj = {'result': [],
+            response_obj = {'data': [],
                             'params': str(request.GET),
                             'success': False,
                             'error': type(e).__name__ + ': ' + e.message}
