@@ -1,8 +1,16 @@
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.views.generic.base import TemplateView
+
+from django.contrib.auth.decorators import login_required
+
+import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^login/$', views.login_user),
+    url(r'^$', views.main_page),
+    
 ]
 
 import Monstr.Core.Runner as Runner
@@ -14,6 +22,7 @@ def obj_to_iso_format(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
 def funcToView(func):
+    #@login_required(login_url='/login/')
     def view(request):
         try:
             # u'key': u'value' => 'key': 'value'
