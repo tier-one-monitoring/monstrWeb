@@ -60,4 +60,5 @@ for module in modules:
     x = target_class()
     x.Initialize()
     for func in x.rest_links:
-        urlpatterns.append(url(r'^rest/' + x.name + '/' + func, funcToView(functools.partial(x.rest_links[func], x))))
+        # urlpatterns.append(url(r'^rest/' + x.name + '/' + func, funcToView(functools.partial(x.rest_links[func], x))))
+        urlpatterns.append(url(r'^rest/' + x.name + '/' + func, funcToView(x.rest_links[func])))
