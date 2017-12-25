@@ -10,8 +10,18 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/$', views.login_user),
     url(r'^$', views.main_page),
-    
 ]
+
+# ==============================================================================
+# Add urls related to templates
+# ==============================================================================
+
+for template in views.templates:
+    urlpatterns.append(url(r'^' + template + '/$', views.templates[template]))
+
+# ==============================================================================
+# Add urls related to rest interface
+# ==============================================================================
 
 import Monstr.Core.Runner as Runner
 import json
@@ -22,7 +32,7 @@ def obj_to_iso_format(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
 def funcToView(func):
-    #@login_required(login_url='/login/')
+    @login_required(login_url='/login/')
     def view(request):
         try:
             # u'key': u'value' => 'key': 'value'
