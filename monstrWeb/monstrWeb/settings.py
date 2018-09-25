@@ -102,4 +102,4 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "monstrWeb/static"),
 )
 
-STATIC_ROOT = "/var/www/lcgsens01o.jinr.ru/static/"
+STATIC_ROOT = "/var/www/t1services.jinr.ru/static/"
